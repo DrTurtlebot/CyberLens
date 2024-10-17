@@ -56,6 +56,7 @@ jobs:
           ENV_CACHE_RETENTION_HOURS=${{ vars.ENV_CACHE_RETENTION_HOURS }}
           ENV_MONGO_URI=${{ secrets.ENV_MONGO_URI }}
           ENV_CORS_WHITELIST=${{ vars.ENV_CORS_WHITELIST }}
+          ENV_PRODUCTION=${{ vars.ENV_PRODUCTION }}
           EOF
 
           cat <<EOF > ./frontend/.env.production

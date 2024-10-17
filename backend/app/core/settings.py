@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     ENV_API_OPENAI_KEY: str
     ENV_MONGO_URI: str
     LOGFIRE_TOKEN: str
-    PRODUCTION: bool = False
+    ENV_PRODUCTION: bool = False
     ENV_CORS_WHITELIST: str = Field(
         ..., description="Comma-separated list of CORS whitelist URLs"
     )

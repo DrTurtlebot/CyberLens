@@ -30,11 +30,13 @@ from app.routes import (
 
 # Initialize Utils and Settings
 logfire.configure(
-    token=settings.main.LOGFIRE_TOKEN, send_to_logfire=settings.main.PRODUCTION
+    token=settings.main.LOGFIRE_TOKEN, send_to_logfire=settings.main.ENV_PRODUCTION
+)
+logfire.notice(
+    "In Production?: {prod_status} ", prod_status=(settings.main.ENV_PRODUCTION)
 )
 logfire.info("----------------")
 logfire.info("Server Starting!")
-logfire.notice("In Production?: {prod_status} ", prod_status=(settings.main.PRODUCTION))
 utils.connect_to_db()
 
 # Launch FastAPI App

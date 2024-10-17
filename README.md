@@ -124,6 +124,7 @@ In GitHub Actions, add the following variables and secrets. These tokens can be 
 - `ENV_CACHE_RETENTION_HOURS`: `5`
 - `ENV_CORS_WHITELIST`: `http://localhost:5000` 
 - `VITE_BACKEND_ADDRESS`: `http://localhost:5000`
+- `ENV_CORS_WHITELIST` : `True` , This tells logfire to log to the main logger
 
 ## Security Note
 
