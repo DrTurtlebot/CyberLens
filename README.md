@@ -224,7 +224,7 @@ sudo systemctl restart nginx
 
 ### 5. ✅ Final Steps
 - Test the server at your Linode IP address. Test `/api` to ensure the backend is working. If not try turn the server off and on again with `sudo reboot` and make sure to re run your actiosn workflows 
-- Make sure your Linode firewall is configured to allow ports 80 (HTTP), 443 (HTTPS), and any other ports needed for services.
+- Make sure your Linode firewall is configured to allow ports 80 (HTTP), 443 (HTTPS), and any other ports needed for services, eg github runner ports. Make sure 27017 is closed down so the database is not exposed. 
 - If needed, add the Linode IP to your DNS records (e.g., Cloudflare).
 - You can set the IP to be an 'a' record on your domain provider, with cloudflare feel free to use flexible proxy for SSL
 - You may get CORS Errors, remember that it will only allow traffic whitelisted by the ENV variable
