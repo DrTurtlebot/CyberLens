@@ -4,6 +4,8 @@
 ## What is it?
 CyberLens is a web-based tool designed to assist cybersecurity analysts in investigating and analyzing suspicious IP addresses, domains, and file hashes. It aggregates data from multiple sources into a single, easy-to-use interface, highlighting pre-set rules and points of interest. CyberLens provides analysts with a broad overview of relevant information, allowing them to use other specialized tools to focus on specific threat indicators.
 
+![alt text](https://imgur.com/zG8njkI.png)
+
 ## Why is it?
 Cyberlens was designed to fill a hole in a Cyber Security SOCs assessment flow. The idea is that Cyberlens will auto highlight things of interest for a basic understanding of possible threats.
 
@@ -14,126 +16,210 @@ Cyberlens was designed to fill a hole in a Cyber Security SOCs assessment flow. 
 - 🧠 **AI Summary Reports**: Automatically generates summaries of findings using AI, giving analysts a high-level overview without the need to comb through raw data.
 - ⚡ **User-friendly Interface**: An intuitive design makes it simple to interpret complex data, helping users make quick and informed decisions.
 - 📂 **Image Export of Widgets**: Allows users to export graphs and widgets as images, making it easy to share and report findings.
-- 🔗 **Integration Ready**: CyberLens comes with its own API, allowing it to be integrated with other tools seamlessly. This enables cybersecurity analysts to call the CyberLens API for deeper threat analysis or to automate workflows.
-- 🛠️ **Customizable Alerts**: Set up custom alerts for emerging threats or user-defined triggers, ensuring timely responses to critical incidents.
-- 🚀 **Fast and Scalable**: Built for performance and scalability with a robust architecture using FastAPI and Docker.
+- 🔗 **Integration Ready**: CyberLens comes with its own API, allowing it to be integrated with other tools seamlessly.
+- 🚀 **Fast and Scalable**: Built for performance and scalability with FastAPI and Docker.
 
 ## System Overview
-The system consists of:
+CyberLens consists of:
 - A **frontend** built with Vue.js for data visualization and user interaction.
 - A **backend** built with Python and FastAPI for gathering and processing data from external sources.
-- A connection to a **MongoDB** to store the cached data.
+- A **MongoDB** server to store cached data.
+- **Nginx** for reverse proxy routing.
 
-### Notes
-> **Important**: This setup will configure a production-ready deployment using GitHub Actions. Ensure that all required GitHub Secrets and Variables are correctly set before proceeding with deployment.
-
-## Requirements
-- GitHub account
-- Correctly configured **GitHub Secrets** and **GitHub Variables**
-- Cloudflare Pages access.
-- A Backend Server with external world access. 
-- MongoDB Server
-- Logfire Logging 
-
-## Module Requirements
-Important, some of these modules may have terms of service for commercial purposes imposing minimum plan requirements.
-If you do not want to use a particular module just leave the URL and key as an empty string `""` in the GitHub environments, and CyberLens will ignore them.
-
-- AbuseIPDB   
-- ProxyCheck  
-- UrlScan	
-- VirusTotal 	
-- WhoDat  	
-
-## Environment Variables and Secrets requirements for backend and frontend
-
-### Secrets:
-- `ENV_API_ABUSEIPDB_KEY`
-- `ENV_API_OPENAI_KEY`
-- `ENV_API_PROXYCHECK_KEY`
-- `ENV_API_URLSCAN_KEY`
-- `ENV_API_VIRUSTOTAL_KEY`
-- `ENV_MONGO_URI`
-- `LOGFIRE_TOKEN`
-
-### Variables:
-- `ENV_API_ABUSEIPDB_URL` : default `https://api.abuseipdb.com/api/v2/check`
-- `ENV_API_PROXYCHECK_URL` : default `https://proxycheck.io/v2/`
-- `ENV_API_URLSCAN_URL` : default `https://urlscan.io/api/v1/scan/`
-- `ENV_API_WHODAT_URL` : default `https://who-dat.as93.net/`
-- `ENV_CACHE_RETENTION_HOURS` : default `5`
-- `ENV_CORS_WHITELIST` : Comma-separated list of allowed origins for CORS. eg `'https://site1.local, https://site2.local'`
-- `PROD_CHECK` : default `True`
-- `WIL_BACKEND_ADDRESS` : default `https://myepicwilprojects.online` (Address of the backend server)
-
-### Debug Variable:
-- `CUSTOM_DOCKER_ARGS` : This is a strange one, if you want custom args on the docker run, you can add them here
-**Important**: In production, this value should be set to atleast '-d' which will stop printing debug messages to the CLI, it can be removed for debugging. If its still there when not needed, you will eat up Github Minutes and it will fail to deploy as the action will constantly be waiting to print from docker. This is done so you can read the github docker run output without having to recommit, but rather change the var. 
-
-## Environment Variables for Default setup (Digital Oceans droplet and Cloudflare pages)
-
-This is not required depending on how you deploy your services.
-
-### Secret: 
-- `CLOUDFLARE_ACCOUNT_ID`
-- `CLOUDFLARE_API_TOKEN`
-- `DOP_API_TOKEN`
-- `DOP_IP`
-- `DOP_SSHKEY`
-- `DOP_USERNAME`
-
-## Deployment
+## Local Testing Setup
 
 ### 1. Clone the repository
-To begin, you will need to clone the repository to your local machine:
-
 ```bash
 git clone https://github.com/your-repo/cyberlens.git
 cd cyberlens
 ```
 
-### 2. Configure GitHub Actions Variables
-Next, set up the required GitHub Secrets and Variables to ensure the automated CI/CD pipeline works correctly. These settings are essential for both the frontend deployment to Cloudflare Pages and the backend deployment to DigitalOcean.
+### 2. Environment Setup
 
-#### Frontend Deployment (Cloudflare Pages)
-The frontend is automatically built and deployed using GitHub Actions whenever code is pushed to the `main` branch. Follow these steps:
+#### Frontend Configuration
+In `/frontend/.env`, set:
+```env
+VITE_BACKEND_ADDRESS=http://localhost:5000
+```
+This sets the backend address for local testing.
 
-1. Clone the repository as instructed above.
-2. Configure the necessary GitHub Secrets and Variables for Cloudflare.
-3. Push your changes or trigger a manual build via the GitHub Actions tab in your repository.
+#### Backend Configuration
+In `/backend/.env`, set up the following environment variables. These tokens can be gathered from the respective API providers (Please check their Terms of Use before using in a commercial setting):
+```env
+ENV_API_PROXYCHECK_KEY=
+ENV_API_PROXYCHECK_URL=https://proxycheck.io/v2/
 
-#### Backend Deployment (DigitalOcean Droplet)
-The backend is deployed to a DigitalOcean Droplet via SSH using GitHub Actions. This involves connecting to the droplet, deploying code, and configuring the environment:
+ENV_API_ABUSEIPDB_KEY=
+ENV_API_ABUSEIPDB_URL=https://api.abuseipdb.com/api/v2/check
 
-1. Ensure that the DigitalOcean Droplet is set up and that you have the necessary SSH access.
-2. Push changes to the repository or trigger a deployment manually via GitHub Actions.
-3. The backend will be built and configured automatically using the GitHub Actions pipeline.
+ENV_API_VIRUSTOTAL_KEY=
+ENV_API_URLSCAN_KEY=
+ENV_API_URLSCAN_URL=https://urlscan.io/api/v1/scan/
 
-## HTTPS Requirements
+ENV_API_WHODAT_URL=https://who-dat.as93.net/
+ENV_API_OPENAI_KEY=
+ENV_CACHE_RETENTION_HOURS=5
+ENV_MONGO_URI=localhost:27017
+ENV_CORS_WHITELIST=http://localhost:5000
+```
 
-For security reasons, it is recommended that all communications between the frontend and backend are made over HTTPS. If your backend server is not configured for HTTPS, you may encounter browser security warnings or blocked requests due to mixed content issues.
+### 3. Running Local Services
 
-### Using Cloudflare Proxy to Convert HTTPS to HTTP
+#### Start MongoDB
+To start a local instance of MongoDB, run:
+```bash
+docker compose up mongodb
+```
+This will expose port `27017` for MongoDB.
 
-If your backend only supports HTTP, you can use Cloudflare to proxy and convert HTTPS requests to HTTP, ensuring secure communication between the frontend and backend.
+#### Start the Backend
+```bash
+cd backend
+python dev_start.py
+```
 
-1. **Enable Cloudflare Proxying**: 
-   Set up your domain with Cloudflare and enable proxying to your backend server.
-   
-2. **Force HTTPS**: 
-   In Cloudflare’s SSL/TLS settings, enable "Full" or "Full (Strict)" mode to force secure HTTPS connections.
-   
-3. **Backend HTTP Configuration**: 
-   Ensure the backend server is set to receive HTTP traffic without forcing HTTPS when proxied via Cloudflare.
+#### Start the Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-4. **CORS Configuration**: 
-   Make sure the `ENV_CORS_WHITELIST` environment variable includes the HTTPS domain of your frontend to allow cross-origin communication without issues.
+The site will be available at `http://localhost:5000/`.
 
-> **Note**: Failing to implement HTTPS properly can lead to security conflict warnings or blocked API requests.
+### 4. Required Ports
+Ensure the following ports are available:
+- 4000 (Backend)
+- 5000 (Frontend)
+- 27017 (MongoDB)
 
-Below is a Diagram showing which services require HTTPS SSL and which do not.
+## GitHub Actions Setup
 
-![alt text](https://imgur.com/zG8njkI.png)
+### Variables and Secrets
+In GitHub Actions, add the following variables and secrets. These tokens can be gathered by the individual API providers (Please check with API Terms of Use). Ensure that the secrets correspond to the correct tokens from the providers.
+
+#### Secrets:
+- `ENV_API_PROXYCHECK_KEY`
+- `ENV_API_ABUSEIPDB_KEY`
+- `ENV_API_VIRUSTOTAL_KEY`
+- `ENV_API_URLSCAN_KEY`
+- `ENV_API_OPENAI_KEY`
+- `ENV_LOGFIRE_TOKEN`
+- `ENV_MONGO_URI`
+
+#### Variables:
+- `ENV_API_PROXYCHECK_URL`: `https://proxycheck.io/v2/`
+- `ENV_API_ABUSEIPDB_URL`: `https://api.abuseipdb.com/api/v2/check`
+- `ENV_API_URLSCAN_URL`: `https://urlscan.io/api/v1/scan/`
+- `ENV_API_WHODAT_URL`: `https://who-dat.as93.net/`
+- `ENV_CACHE_RETENTION_HOURS`: `5`
+- `ENV_CORS_WHITELIST`: `http://localhost:5000` 
+- `VITE_BACKEND_ADDRESS`: `http://localhost:5000`
+
+## Security Note
+
+### CORS Whitelist Configuration
+Currently, the CORS whitelist in `main.py` accepts all traffic, which can pose a security risk. To restrict access, modify the `main.py` file and remove `['*']` from the CORS whitelist. Instead, use the Env Var
+
+## Linode Deployment
+
+### 1. Create a Linode Server
+- Spin up a Linode with Ubuntu in your preferred region.
+- Use a shared CPU plan (2GB is recommended, though 1GB might work).
+- Set a secure root password (save it for later use). Optionally, set up SSH for added security/connection.
+
+### 2. Configure Linode
+
+#### Create a New User
+Instead of using the root account, it's best practice to create a new user for security purposes. This ensures that GitHub Actions does not have root access to the system.
+```bash
+adduser coolman
+sudo adduser coolman sudo
+su coolman
+```
+You can replace `coolman` with any username of your choice. Ensure that the password you set is secure.
+
+#### Install Docker and Docker-Compose
+```bash
+sudo apt-get update
+sudo apt-get install -y docker.io
+sudo apt install docker-compose
+sudo usermod -aG docker coolman
+newgrp docker
+```
+
+### 3. GitHub Actions Runner Setup
+
+To automate deployments, GitHub Actions is used. Go to **Settings > Actions > Runners** in your GitHub repository and create a new self-hosted runner:
+
+- Select "New Self-Hosted Runner" and follow the instructions on GitHub.
+- Once on your Linode server, switch to the new user (`coolman`) and run the commands given by GitHub, starting with:
+```bash
+$ mkdir actions-runner && cd actions-runner
+```
+Continue through the steps provided by GitHub to configure the runner.
+
+```bash
+sudo ./svc.sh install
+sudo ./svc.sh start
+sudo ./svc.sh status
+```
+This installs the runner as a service that will start automatically on startup.
+
+### 4. NGINX Setup
+
+Nginx is used as a reverse proxy to route traffic to the appropriate services.
+
+#### Install Nginx
+```bash
+sudo apt install nginx
+```
+
+#### Configure Nginx
+Edit the default configuration file:
+```bash
+sudo nano /etc/nginx/sites-available/default
+```
+
+> **Note**: Feel free to change any of these settings below to match your config, including setting a specific server name rather than using the default `_`.
+
+Replace the contents with the following configuration:
+```nginx
+server {
+    listen 80;
+    listen [::]:80;
+    server_name _;
+
+    location / {
+       proxy_pass http://localhost:5000;
+    }
+
+    location /api {
+        proxy_pass http://localhost:4000;
+    }
+}
+```
+
+Test the configuration:
+```bash
+sudo nginx -t
+```
+
+Restart Nginx:
+```bash
+sudo systemctl restart nginx
+```
+
+### 5. Final Steps
+- Test the server at your Linode IP address. Test `/api` to ensure the backend is working.
+- Make sure your Linode firewall is configured to allow ports 80 (HTTP), 443 (HTTPS), and any other ports needed for services.
+- If needed, add the Linode IP to your DNS records (e.g., Cloudflare).
+- You can set the IP to be an 'a' record on your domain provider, with cloudflare feel free to use flexible proxy for SSL
+
+Your CyberLens instance should now be live!
+
+## Security Considerations
+Ensure that all environment variables are securely set and that no sensitive data (such as API keys) is exposed publicly. Always use HTTPS in production to avoid potential security risks.
 
 ## API Rate Limiting and Quotas
 Be aware that third-party services such as AbuseIPDB, VirusTotal, and ProxyCheck impose rate limits on API calls. Exceeding these limits may result in temporary suspension of access to their services.

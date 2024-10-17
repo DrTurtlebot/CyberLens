@@ -49,7 +49,7 @@ jobs:
           ENV_API_URLSCAN_URL=${{ vars.ENV_API_URLSCAN_URL }}
 
           ENV_API_OPENAI_KEY=${{ secrets.ENV_API_OPENAI_KEY }}
-          LOGFIRE_TOKEN=${{ secrets.LOGFIRE_TOKEN }}
+          LOGFIRE_TOKEN=${{ secrets.ENV_LOGFIRE_TOKEN }}
 
           ENV_API_WHODAT_URL=${{ vars.ENV_API_WHODAT_URL }}
 
