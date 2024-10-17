@@ -4,7 +4,7 @@
 ## What is it?
 CyberLens is a web-based tool designed to assist cybersecurity analysts in investigating and analyzing suspicious IP addresses, domains, and file hashes. It aggregates data from multiple sources into a single, easy-to-use interface, highlighting pre-set rules and points of interest. CyberLens provides analysts with a broad overview of relevant information, allowing them to use other specialized tools to focus on specific threat indicators.
 
-Depending on if I am still paying for the domain, you can see it at HTTPS://www.cyberlens.online
+Depending on if I am still paying for the domain and server, you can see it at HTTPS://www.cyberlens.online
  
 ![alt text](https://github.com/DrTurtlebot/CyberLens/blob/main/.github/workflows/docs/KHMBA15MQKW3_Hero.png)
 
