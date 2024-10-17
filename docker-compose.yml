@@ -17,7 +17,7 @@ services:
     env_file:
       - .env
     ports:
-      - "4000:4000" # Exposes backend on port 4000
+      - "4000:4000" # Exposes backend on port 4000 for nginx
 
   # Frontend Service
   frontend:
