@@ -169,6 +169,7 @@ To automate deployments, GitHub Actions is used. Go to **Settings > Actions > Ru
 mkdir actions-runner && cd actions-runner
 ```
 Continue through the steps provided by GitHub to configure the runner.
+either do not execute the ./run.sh or cancel it once completed (canceling may require you to 're-run' github actions later)
 
 ```bash
 sudo ./svc.sh install
