@@ -65,5 +65,5 @@ jobs:
       # Set up Docker Compose
       - name: Set up Docker Compose
         run: |
-          sudo docker-compose down
-          sudo docker-compose up --build -d  # Build and start in detached mode
+          docker-compose down
+          docker-compose up --build -d  # Build and start in detached mode
