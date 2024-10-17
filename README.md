@@ -143,7 +143,7 @@ Currently, the CORS whitelist in `main.py` accepts all traffic, which can pose a
 ### 2. 👤 Configure Linode
 
 #### Create a New User
-Instead of using the root account, it's best practice to create a new user for security purposes. This ensures that GitHub Actions does not have root access to the system.
+Instead of using the root account, it's best practice to create a new user for security purposes. This ensures that GitHub Actions does not have root access to the system. I am not a security expert so please consult someone who knows what they are doing, as I cannot guarantee this is the 100% secure way to do it.
 ```bash
 adduser coolman
 sudo adduser coolman sudo
