@@ -30,6 +30,7 @@ If you decide to run CyberLens, I hope you find it useful! Feel free to share an
 
 -Alex
 
+
 ## 🛠️ System Overview
 CyberLens consists of:
 - A **frontend** built with Vue.js for data visualization and user interaction.
