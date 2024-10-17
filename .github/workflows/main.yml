@@ -1,0 +1,69 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      deployments: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Ensure Docker is installed and running
+      - name: Ensure Docker is installed
+        run: |
+          if ! [ -x "$(command -v docker)" ]; then
+            echo "Docker not found, installing Docker..."
+            echo "if this fails, install through terminal"
+            sudo apt-get update
+            sudo apt-get install -y docker.io
+            sudo apt install docker-compose
+            sudo systemctl enable docker
+            sudo systemctl start docker
+          else
+            echo "Docker is already installed."
+          fi
+
+      # Optional: Verify Docker is working correctly
+      - name: Verify Docker installation
+        run: docker --version
+
+      # Generate .env file from GitHub Secrets
+      - name: Generate .env file
+        run: |
+          cat <<EOF > .env
+          ENV_API_PROXYCHECK_KEY=${{ secrets.ENV_API_PROXYCHECK_KEY }}
+          ENV_API_PROXYCHECK_URL=${{ vars.ENV_API_PROXYCHECK_URL }}
+
+          ENV_API_ABUSEIPDB_KEY=${{ secrets.ENV_API_ABUSEIPDB_KEY }}
+          ENV_API_ABUSEIPDB_URL=${{ vars.ENV_API_ABUSEIPDB_URL }}
+
+          ENV_API_VIRUSTOTAL_KEY=${{ secrets.ENV_API_VIRUSTOTAL_KEY }}
+
+          ENV_API_URLSCAN_KEY=${{ secrets.ENV_API_URLSCAN_KEY }}
+          ENV_API_URLSCAN_URL=${{ vars.ENV_API_URLSCAN_URL }}
+
+          ENV_API_OPENAI_KEY=${{ secrets.ENV_API_OPENAI_KEY }}
+          LOGFIRE_TOKEN=${{ secrets.LOGFIRE_TOKEN }}
+
+          ENV_API_WHODAT_URL=${{ vars.ENV_API_WHODAT_URL }}
+
+          ENV_CACHE_RETENTION_HOURS=${{ vars.ENV_CACHE_RETENTION_HOURS }}
+          ENV_MONGO_URI=${{ secrets.ENV_MONGO_URI }}
+          ENV_CORS_WHITELIST=${{ vars.ENV_CORS_WHITELIST }}
+          EOF
+
+          cat <<EOF > ./frontend/.env.production
+          VITE_BACKEND_ADDRESS=${{ vars.VITE_BACKEND_ADDRESS }}
+          EOF
+
+      # Set up Docker Compose
+      - name: Set up Docker Compose
+        run: |
+          docker-compose down
+          docker-compose up --build -d  # Build and start in detached mode

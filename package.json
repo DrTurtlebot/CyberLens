@@ -1,0 +1,14 @@
+{
+  "name": "wil-master-file",
+  "version": "1.0.0",
+  "description": "Hello welcome to Cyberlens. This is a web based tool to aid cybersecurity analysts in efficiently analysing and investigating IP Addresses, Domains, and File hashes of intrest.",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.47.2",
+    "@types/node": "^22.7.2"
+  }
+}

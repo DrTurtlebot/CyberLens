@@ -1,0 +1,4 @@
+.env
+dockerfile
+dev_start.py
+.dockerignore

@@ -1,0 +1,30 @@
+services:
+  # MongoDB Service
+  mongodb:
+    image: mongo:latest
+    container_name: mongo_container
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  # Backend Service
+  backend:
+    build: ./backend
+    container_name: backend_container
+    depends_on:
+      - mongodb
+    env_file:
+      - .env
+    ports:
+      - "4000:4000" # Exposes backend on port 4000
+
+  # Frontend Service
+  frontend:
+    build: ./frontend
+    container_name: frontend_container
+    ports:
+      - "5000:5000" # Maps port 5000 of host to port 5000 of frontend container
+
+volumes:
+  mongo_data:

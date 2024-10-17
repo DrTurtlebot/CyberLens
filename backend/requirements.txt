@@ -1,0 +1,13 @@
+fastapi==0.112.0
+uvicorn==0.30.5
+vt-py==0.18.3
+requests==2.32.3
+pydantic==2.8.2
+pydantic-settings==2.4.0
+pymongo==4.8.0
+slowapi==0.1.9
+starlette==0.37.2
+openai==1.50.0
+pypdf==5.0.0
+reportlab==4.2.2
+logfire==0.55.0

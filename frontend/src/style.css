@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-size: 16px;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-align: center;
+}
+
+@layer components {
+  .CardData {
+    @apply mt-2 m-auto 4k:mt-6 4k:max-w-[800px] 4k:text-3xl;
+  }
+}
