@@ -122,7 +122,7 @@ In GitHub Actions, add the following variables and secrets. These tokens can be 
 - `ENV_API_URLSCAN_URL`: `https://urlscan.io/api/v1/scan/`
 - `ENV_API_WHODAT_URL`: `https://who-dat.as93.net/`
 - `ENV_CACHE_RETENTION_HOURS`: `5`
-- `ENV_CORS_WHITELIST`: `http://http://{MYWEBSITEDOMAIN OR IPADDRESS HERE}` 
+- `ENV_CORS_WHITELIST`: `http://{MYWEBSITEDOMAIN OR IPADDRESS HERE}` 
 - `VITE_BACKEND_ADDRESS`: `http://{MYWEBSITEDOMAIN OR IPADDRESS HERE}/api`
 - `ENV_PRODUCTION` : `True` , This tells logfire to log to the main logger
 
