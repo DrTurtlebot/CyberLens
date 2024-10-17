@@ -26,7 +26,7 @@ async def summary_function(input_data: RequestDataModel):
         # Get the target IP and the AbuseIPDB API key and address
         # target_ip = utils.process_address_to_ip(input_data)
         input_data
-        # This is really shitly coded, but it works and still allows queing, todo fix later!
+        # This is really weirdly coded, but it works and still allows queing, todo fix later!
         tempdata = {}
         tempdata.update({"ABUSEIPDB": await abuseipdb.request_data(input_data)})
         tempdata.update({"PROXY": await proxycheck.request_data(input_data)})

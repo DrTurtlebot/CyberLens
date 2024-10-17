@@ -15,6 +15,7 @@ from app.common.models import AddressModel, RequestDataModel
 from app.core import settings
 
 
+# TODO, CHANGE THE MONGO TO MOTOR, THIS IS MASSIVE!
 def connect_to_db():
     global mydb, mylock
     with logfire.span("Connecting to MongoDB.."):
