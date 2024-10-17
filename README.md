@@ -223,7 +223,7 @@ sudo systemctl restart nginx
 ```
 
 ### 5. ✅ Final Steps
-- Test the server at your Linode IP address. Test `/api` to ensure the backend is working.
+- Test the server at your Linode IP address. Test `/api` to ensure the backend is working. If not try turn the server off and on again with `sudo reboot`
 - Make sure your Linode firewall is configured to allow ports 80 (HTTP), 443 (HTTPS), and any other ports needed for services.
 - If needed, add the Linode IP to your DNS records (e.g., Cloudflare).
 - You can set the IP to be an 'a' record on your domain provider, with cloudflare feel free to use flexible proxy for SSL
