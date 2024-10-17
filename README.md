@@ -19,14 +19,23 @@ Cyberlens was designed to fill a hole in a Cyber Security SOCs assessment flow. 
 - 🔗 **Integration Ready**: CyberLens comes with its own API, allowing it to be integrated with other tools seamlessly.
 - 🚀 **Fast and Scalable**: Built for performance and scalability with FastAPI and Docker.
 
-## System Overview
+- ## Note from Me 👨‍💻
+This project was created for a Security Operations Center (SOC) to improve its cybersecurity workflow while I was a student. I identified a gap in the analysts' process and developed CyberLens to help streamline their first responses. Today, CyberLens is an active part of the SOC's toolset.
+
+Many of the tools and techniques I used in this project were things I learned along the way, and what started as a small idea quickly grew into something much larger. As a result, you might come across parts of the code and think, "What is going on here?" (though I hope you won’t!). That said, this project reflects my learning process, and while some aspects could probably be optimized, it's been a valuable experience for my growth as a developer. e.g. I didnt have enough time to finish my tests..
+
+If you decide to run CyberLens, I hope you find it useful! Feel free to share any cool ideas you have or ways to improve it. 😊
+
+-Alex
+
+## 🛠️ System Overview
 CyberLens consists of:
 - A **frontend** built with Vue.js for data visualization and user interaction.
 - A **backend** built with Python and FastAPI for gathering and processing data from external sources.
 - A **MongoDB** server to store cached data.
 - **Nginx** for reverse proxy routing.
 
-## Local Testing Setup
+## 🧪 Local Testing Setup
 
 ### 1. Clone the repository
 ```bash
@@ -87,18 +96,18 @@ npm run dev
 
 The site will be available at `http://localhost:5000/`.
 
-### 4. Required Ports
+###  4. 🔌 Required Ports
 Ensure the following ports are available:
 - 4000 (Backend)
 - 5000 (Frontend)
 - 27017 (MongoDB)
 
-## GitHub Actions Setup
+## ⚙️ GitHub Actions Setup
 
 ### Variables and Secrets
 In GitHub Actions, add the following variables and secrets. These tokens can be gathered by the individual API providers (Please check with API Terms of Use). Ensure that the secrets correspond to the correct tokens from the providers.
 
-#### Secrets:
+#### 🔐 Secrets:
 - `ENV_API_PROXYCHECK_KEY`
 - `ENV_API_ABUSEIPDB_KEY`
 - `ENV_API_VIRUSTOTAL_KEY`
@@ -121,14 +130,14 @@ In GitHub Actions, add the following variables and secrets. These tokens can be 
 ### CORS Whitelist Configuration
 Currently, the CORS whitelist in `main.py` accepts all traffic, which can pose a security risk. To restrict access, modify the `main.py` file and remove `['*']` from the CORS whitelist. Instead, use the Env Var
 
-## Linode Deployment
+## 🚀☁️ Linode Deployment
 
-### 1. Create a Linode Server
+### 1. 🖥️ Create a Linode Server
 - Spin up a Linode with Ubuntu in your preferred region.
 - Use a shared CPU plan (2GB is recommended, though 1GB might work).
 - Set a secure root password (save it for later use). Optionally, set up SSH for added security/connection.
 
-### 2. Configure Linode
+### 2. 👤 Configure Linode
 
 #### Create a New User
 Instead of using the root account, it's best practice to create a new user for security purposes. This ensures that GitHub Actions does not have root access to the system.
@@ -148,7 +157,7 @@ sudo usermod -aG docker coolman
 newgrp docker
 ```
 
-### 3. GitHub Actions Runner Setup
+### 3. ⚙️ GitHub Actions Runner Setup
 
 To automate deployments, GitHub Actions is used. Go to **Settings > Actions > Runners** in your GitHub repository and create a new self-hosted runner:
 
@@ -166,7 +175,7 @@ sudo ./svc.sh status
 ```
 This installs the runner as a service that will start automatically on startup.
 
-### 4. NGINX Setup
+### 4. 🌐 NGINX Setup
 
 Nginx is used as a reverse proxy to route traffic to the appropriate services.
 
@@ -210,7 +219,7 @@ Restart Nginx:
 sudo systemctl restart nginx
 ```
 
-### 5. Final Steps
+### 5. ✅ Final Steps
 - Test the server at your Linode IP address. Test `/api` to ensure the backend is working.
 - Make sure your Linode firewall is configured to allow ports 80 (HTTP), 443 (HTTPS), and any other ports needed for services.
 - If needed, add the Linode IP to your DNS records (e.g., Cloudflare).
@@ -218,15 +227,15 @@ sudo systemctl restart nginx
 
 Your CyberLens instance should now be live!
 
-## Security Considerations
+## 🔒 Security Considerations
 Ensure that all environment variables are securely set and that no sensitive data (such as API keys) is exposed publicly. Always use HTTPS in production to avoid potential security risks.
 
-## API Rate Limiting and Quotas
+## ⏱️ API Rate Limiting and Quotas
 Be aware that third-party services such as AbuseIPDB, VirusTotal, and ProxyCheck impose rate limits on API calls. Exceeding these limits may result in temporary suspension of access to their services.
 
 The Default rate Limit for Cyberlens aswell is 10 requests per minute, this can be modified in the main.py file
 
-### Strategies for Managing Rate Limits:
+### 💡 Strategies for Managing Rate Limits:
 1. **Data Caching**: Cached data is stored in MongoDB to reduce unnecessary API calls. You can configure cache retention using the `ENV_CACHE_RETENTION_HOURS` environment variable.
 2. **API Key Quota**: Ensure that the API keys are properly managed, and you are aware of any quota limitations imposed by the services. Some may require an upgraded plan for higher request limits.
 
