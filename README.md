@@ -113,8 +113,8 @@ In GitHub Actions, add the following variables and secrets. These tokens can be 
 - `ENV_API_VIRUSTOTAL_KEY`
 - `ENV_API_URLSCAN_KEY`
 - `ENV_API_OPENAI_KEY`
-- `ENV_LOGFIRE_TOKEN`
-- `ENV_MONGO_URI`
+- `ENV_LOGFIRE_TOKEN` : Pydantic Logfire
+- `ENV_MONGO_URI` : default(`mongodb:27017`), change it to something else for external MongoDB
 
 #### Variables:
 - `ENV_API_PROXYCHECK_URL`: `https://proxycheck.io/v2/`
