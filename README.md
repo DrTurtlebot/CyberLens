@@ -105,7 +105,7 @@ Ensure the following ports are available:
 ## ⚙️ GitHub Actions Setup
 
 ### Variables and Secrets
-In GitHub Actions, add the following variables and secrets. These tokens can be gathered by the individual API providers (Please check with API Terms of Use). Ensure that the secrets correspond to the correct tokens from the providers.
+In GitHub Actions, add the following variables and secrets. These tokens can be gathered by the individual API providers (Please check with API Terms of Use). Ensure that the secrets correspond to the correct tokens from the providers. If you dont want to use a service, e.g. dont have a 'VirusTotal' key, set the secret to equal an empty string, eg ENV_API_VIRUSTOTAL_KEY = "", and include the default variable for the URL.
 
 #### 🔐 Secrets:
 - `ENV_API_PROXYCHECK_KEY`
