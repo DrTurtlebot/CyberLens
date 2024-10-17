@@ -227,6 +227,7 @@ sudo systemctl restart nginx
 - Make sure your Linode firewall is configured to allow ports 80 (HTTP), 443 (HTTPS), and any other ports needed for services.
 - If needed, add the Linode IP to your DNS records (e.g., Cloudflare).
 - You can set the IP to be an 'a' record on your domain provider, with cloudflare feel free to use flexible proxy for SSL
+- You may get CORS Errors, remember that it will only allow traffic whitelisted by the ENV variable
 
 Your CyberLens instance should now be live!
 
