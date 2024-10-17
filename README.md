@@ -146,6 +146,7 @@ Instead of using the root account, it's best practice to create a new user for s
 adduser coolman
 sudo adduser coolman sudo
 su coolman
+cd ~
 ```
 You can replace `coolman` with any username of your choice. Ensure that the password you set is secure.
 
