@@ -36,7 +36,7 @@ logfire.notice(
     "In Production?: {prod_status} ", prod_status=(settings.main.ENV_PRODUCTION)
 )
 logfire.info("----------------")
-logfire.info("Server Starting!")
+logfire.info("Server Starting")
 utils.connect_to_db()
 
 # Launch FastAPI App
