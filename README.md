@@ -166,7 +166,7 @@ To automate deployments, GitHub Actions is used. Go to **Settings > Actions > Ru
 - Select "New Self-Hosted Runner" and follow the instructions on GitHub.
 - Once on your Linode server, switch to the new user (`coolman`) and run the commands given by GitHub, starting with:
 ```bash
-$ mkdir actions-runner && cd actions-runner
+mkdir actions-runner && cd actions-runner
 ```
 Continue through the steps provided by GitHub to configure the runner.
 
