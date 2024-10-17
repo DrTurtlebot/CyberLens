@@ -1,5 +1,5 @@
 
-# CyberLens
+# CyberLens 🔍
 
 ## What is it?
 CyberLens is a web-based tool designed to assist cybersecurity analysts in investigating and analyzing suspicious IP addresses, domains, and file hashes. It aggregates data from multiple sources into a single, easy-to-use interface, highlighting pre-set rules and points of interest. CyberLens provides analysts with a broad overview of relevant information, allowing them to use other specialized tools to focus on specific threat indicators.
@@ -19,7 +19,7 @@ Cyberlens was designed to fill a hole in a Cyber Security SOCs assessment flow. 
 - 🔗 **Integration Ready**: CyberLens comes with its own API, allowing it to be integrated with other tools seamlessly.
 - 🚀 **Fast and Scalable**: Built for performance and scalability with FastAPI and Docker.
 
-- ## Note from Me 👨‍💻
+- ## 👨‍💻 Note from Me 
 This project was created for a Security Operations Center (SOC) to improve its cybersecurity workflow while I was a student. I identified a gap in the analysts' process and developed CyberLens to help streamline their first responses. Today, CyberLens is an active part of the SOC's toolset.
 
 Many of the tools and techniques I used in this project were things I learned along the way, and what started as a small idea quickly grew into something much larger. As a result, you might come across parts of the code and think, "What is going on here?" (though I hope you won’t!). That said, this project reflects my learning process, and while some aspects could probably be optimized, it's been a valuable experience for my growth as a developer. e.g. I didnt have enough time to finish my tests..
