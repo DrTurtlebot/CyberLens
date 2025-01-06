@@ -17,8 +17,7 @@
       class="relative max-w-xl m-auto mt-4 p-2 text-center 4k:mt-24 4k:mb-10"
     >
       <b class="text-3xl dark:text-zinc-100 4k:text-6xl">CyberLens</b>
-      <p>Hello Person (or persons?) Still using Cyberlens! How do you do? 👋 🤙</p>
-      <p>Please leave a bug report! I would love to hear from you -Alex</p>
+      <p>🚀 Still Alive and Well 🚀</p>
     </div>
 
     <!-- Search Bar -->
