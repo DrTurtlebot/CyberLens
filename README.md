@@ -51,12 +51,12 @@ cd cyberlens
 #### Frontend Configuration
 In `/frontend/.env`, set:
 ```env
-VITE_BACKEND_ADDRESS=http://localhost:5000
+VITE_BACKEND_ADDRESS=http://localhost:4000
 ```
 This sets the backend address for local testing.
 
 #### Backend Configuration
-In `/backend/.env`, set up the following environment variables. These tokens can be gathered from the respective API providers (Please check their Terms of Use before using in a commercial setting):
+In `/.env`,or (`/backend/.env`) set up the following environment variables. These tokens can be gathered from the respective API providers (Please check their Terms of Use before using in a commercial setting):
 ```env
 ENV_API_PROXYCHECK_KEY=
 ENV_API_PROXYCHECK_URL=https://proxycheck.io/v2/
@@ -73,6 +73,7 @@ ENV_API_OPENAI_KEY=
 ENV_CACHE_RETENTION_HOURS=5
 ENV_MONGO_URI=localhost:27017
 ENV_CORS_WHITELIST=http://localhost:5000
+ENV_LOGFIRE_TOKEN=
 ```
 
 ### 3. Running Local Services
