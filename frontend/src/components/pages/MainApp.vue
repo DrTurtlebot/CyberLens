@@ -52,62 +52,99 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import PopulateCards from '@organisms/PopulateCards.vue';
 import CustomHeader from '@organisms/CustomHeader.vue';
 
 export default defineComponent({
+  name: 'MainApp',
   components: {
     PopulateCards,
-    CustomHeader
+    CustomHeader,
   },
   setup() {
+    const route = useRoute();
+    const router = useRouter();
+
     const input = ref('');
     const submittedInput = ref('');
 
     const isIpAddress = (value) => {
-      const ipPattern = /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])$/;
+      const ipPattern =
+        /^(25[0-5]|2[0-4]\d|[01]?\d?\d)\.(25[0-5]|2[0-4]\d|[01]?\d?\d)\.(25[0-5]|2[0-4]\d|[01]?\d?\d)\.(25[0-5]|2[0-4]\d|[01]?\d?\d)$/;
       return ipPattern.test(value);
     };
 
     const isHash = (value) => {
+      // Matches common hash lengths: 32 (MD5), 40 (SHA1), 64 (SHA256)
       const hashPattern = /^[a-fA-F0-9]{32}$|^[a-fA-F0-9]{40}$|^[a-fA-F0-9]{64}$/;
       return hashPattern.test(value);
     };
 
     const formatUrl = (value) => {
+      // Remove whitespace
       value = value.replace(/\s/g, '');
 
+      // If IP address or recognized hash, return as-is
       if (isIpAddress(value) || isHash(value)) {
         return value;
       }
 
-      const urlPattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/;
+      // URL pattern check
+      const urlPattern = /^(https?:\/\/)?([\w-]+\.)+\w{2,}(\/.*)?$/;
       const hasProtocol = /^https?:\/\//.test(value);
 
       if (urlPattern.test(value)) {
         return hasProtocol ? value : `http://${value}`;
       }
 
+      // Fallback
       return `http://www.${value}`;
     };
-
     const submitInput = () => {
       if (input.value) {
+        // Format the user input (e.g., add http:// if missing)
         submittedInput.value = formatUrl(input.value);
         console.log('Submitted:', submittedInput.value);
+
+        // Optional: Update the URL param so the user can share the link
+        // e.g. /google.com
+        router.push({
+          name: 'Home',
+          params: { searchParam: input.value },
+        });
       }
     };
+
+    // set our input and perform a search
+    onMounted(() => {
+      const param = route.params.searchParam;
+      if (param) {
+        input.value = param;
+        submitInput();
+      }
+    });
+
+    watch(
+      () => route.params.searchParam,
+      (newVal, oldVal) => {
+        if (newVal && newVal !== oldVal) {
+          input.value = newVal;
+          submitInput();
+        }
+      }
+    );
 
     return {
       input,
       submittedInput,
       submitInput,
-      viteEnv: import.meta.env,
     };
   },
 });
 </script>
+
 
 <style scoped>
 /* Tailwind classes handle most styling, adjust as needed */

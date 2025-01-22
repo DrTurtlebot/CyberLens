@@ -9,18 +9,23 @@
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.963 7.963 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
         </div>
-        <p v-if="error">Error: {{ error }}</p>
-        <div v-if="responseData">
-            <div v-if="responseData.Error">
-                <p>Error: {{ responseData.Error }}</p>
-            </div>
+        <div v-else>
+            <p v-if="error">Error: {{ error }}</p>
+            <div v-if="responseData">
+                <div v-if="responseData.Error">
+                    <p>Error: {{ responseData.Error }}</p>
+                </div>
+                <div v-else>
+                    <div class="CardData">
+                        <img :src="responseData.screenshot_url" alt="screenshot" class="m-auto max-w-full  "/>
+                        <h3></h3>
+                    </div>       
+                </div>
+            </div> 
             <div v-else>
-                <div class="CardData">
-                    <img :src="responseData.screenshot_url" alt="screenshot" class="m-auto max-w-full  "/>
-                    <h3></h3>
-                </div>       
+            <p>No Data Returned</p>
             </div>
-        </div> 
+        </div>
     </div>
 </template>
 

@@ -10,71 +10,75 @@
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.963 7.963 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
       </svg>
     </div>
+    <div v-else>
+      <p v-if="error">Error: {{ error }}</p>
 
-    <p v-if="error">Error: {{ error }}</p>
+      <div v-if="responseData">
+        <div v-if="responseData.Error">
+          <p>Error: {{ responseData.Error }}</p>
+        </div>
+        <div v-else>
+          <div class="CardData">
+            <b>Host Info</b>
 
-    <div v-if="responseData">
-      <div v-if="responseData.Error">
-        <p>Error: {{ responseData.Error }}</p>
-      </div>
-      <div v-else>
-        <div class="CardData">
-          <b>Host Info</b>
+            <!-- Host Info -->
+            <infogrid
+              :infoItems="[{
+                label: 'IP Address:', value: responseData.data.ipAddress
+              }, {
+                label: 'Is Public:', value: responseData.data.isPublic
+              }, {
+                label: 'IP Version:', value: responseData.data.ipVersion
+              }, {
+                label: 'Is Whitelisted:', value: responseData.data.isWhitelisted
+              }]"
+            />
 
-          <!-- Host Info -->
-          <infogrid
-            :infoItems="[{
-              label: 'IP Address:', value: responseData.data.ipAddress
-            }, {
-              label: 'Is Public:', value: responseData.data.isPublic
-            }, {
-              label: 'IP Version:', value: responseData.data.ipVersion
-            }, {
-              label: 'Is Whitelisted:', value: responseData.data.isWhitelisted
-            }]"
-          />
+            <hr class="w-full max-w-[600px] m-auto p-1" />
 
-          <hr class="w-full max-w-[600px] m-auto p-1" />
+            <!-- Abuse Score and Additional Info -->
+            <infogrid
+              :infoItems="[{
+                label: 'Abuse Score:', value: abuseScoreDisplay(), color: getAbuseScoreColour(responseData.data.abuseConfidenceScore)
+              }, {
+                label: 'Usage Type:', value: responseData.data.usageType
+              }, {
+                label: 'ISP:', value: responseData.data.isp
+              }, {
+                label: 'Domain:', value: responseData.data.domain
+              }]"
+            />
 
-          <!-- Abuse Score and Additional Info -->
-          <infogrid
-            :infoItems="[{
-              label: 'Abuse Score:', value: abuseScoreDisplay(), color: getAbuseScoreColour(responseData.data.abuseConfidenceScore)
-            }, {
-              label: 'Usage Type:', value: responseData.data.usageType
-            }, {
-              label: 'ISP:', value: responseData.data.isp
-            }, {
-              label: 'Domain:', value: responseData.data.domain
-            }]"
-          />
+            <hr class="w-full max-w-[600px] m-auto p-1" />
 
-          <hr class="w-full max-w-[600px] m-auto p-1" />
+            <!-- Tor, Country Info, and User Count -->
+            <infogrid
+              :infoItems="[{
+                label: 'Country Name:', value: responseData.data.countryName
+              }, {
+                label: 'Users Num:', value: responseData.data.numDistinctUsers
+              }]"
+            />
 
-          <!-- Tor, Country Info, and User Count -->
-          <infogrid
-            :infoItems="[{
-              label: 'Country Name:', value: responseData.data.countryName
-            }, {
-              label: 'Users Num:', value: responseData.data.numDistinctUsers
-            }]"
-          />
+            <hr class="w-full max-w-[600px] m-auto p-1" />
 
-          <hr class="w-full max-w-[600px] m-auto p-1" />
+            <!-- Reports Section -->
+            <div v-if="responseData.data.reports && responseData.data.reports.length > 1">
+              <h3>Reports Per Day</h3>
+              <canvas ref="reportsLineChart" class="w-full h-64 max-w-[400px] m-auto"></canvas>
+            </div>
 
-          <!-- Reports Section -->
-          <div v-if="responseData.data.reports && responseData.data.reports.length > 1">
-            <h3>Reports Per Day</h3>
-            <canvas ref="reportsLineChart" class="w-full h-64 max-w-[400px] m-auto"></canvas>
-          </div>
-
-          <!-- Link to AbuseIPDB -->
-          <div v-if="responseData.data.ipAddress !== 'status'">
-            <a :href="`https://www.abuseipdb.com/check/${responseData.data.ipAddress}`" target="_blank">
-              <CustomButtonNormal>Go to AbuseIPDB</CustomButtonNormal>
-            </a>
+            <!-- Link to AbuseIPDB -->
+            <div v-if="responseData.data.ipAddress !== 'status'">
+              <a :href="`https://www.abuseipdb.com/check/${responseData.data.ipAddress}`" target="_blank">
+                <CustomButtonNormal>Go to AbuseIPDB</CustomButtonNormal>
+              </a>
+            </div>
           </div>
         </div>
+      </div>
+      <div v-else>
+        <p>No Data Returned</p>
       </div>
     </div>
   </div>

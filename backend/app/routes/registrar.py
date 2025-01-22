@@ -18,19 +18,20 @@ async def registrar_function(input_data: AnyUrl):
 
         whodat_address = settings.main.ENV_API_WHODAT_URL
         check_address = f"{whodat_address}{input_data}"
-
         # Make initial request to the Whodat API
         response = requests.get(check_address)
-
         # If the response status is 500, retry with the root domain
         if response.status_code == 500:
             root_domain = ".".join(input_data.split(".")[-2:])
             check_address = f"{whodat_address}{root_domain}"
             response = requests.get(check_address)
+            response = response.json()
+        else:
+            logfire.error("{error}", error=traceback.format_exc())
+            #print("Response is not JSON.. possibly a html response from server if the API is down")
+            response = None
 
-        # Log the final URL used and return the JSON response
-        logfire.info("Final URL used: {check_address}", check_address=check_address)
-        return response.json()
+        return response
 
 
 # API endpoint to request data from the registrar API

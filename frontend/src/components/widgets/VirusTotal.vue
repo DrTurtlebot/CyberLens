@@ -130,6 +130,10 @@
         </div>
       </div>
     </div>
+    <div v-else>
+      <p>No Data Returned</p>
+    </div>
+    
   </div>
 </template>
 

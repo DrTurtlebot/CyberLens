@@ -28,9 +28,13 @@ async def summary_function(input_data: RequestDataModel):
         input_data
         # This is really weirdly coded, but it works and still allows queing, todo fix later!
         tempdata = {}
-        tempdata.update({"ABUSEIPDB": await abuseipdb.request_data(input_data)})
-        tempdata.update({"PROXY": await proxycheck.request_data(input_data)})
-        tempdata.update({"VIRUS": await virustotal.request_data(input_data)})
+        datatype = utils.check_data_type(input_data)
+        if datatype in ["url", "ip"]:
+            tempdata.update({"ABUSEIPDB": await abuseipdb.request_data(input_data)})
+            tempdata.update({"PROXY": await proxycheck.request_data(input_data)})
+            tempdata.update({"VIRUS": await virustotal.request_data(input_data)})
+        if datatype in ["hash"]:
+            tempdata.update({"VIRUS": await virustotal.request_data(input_data)})
         try:
             AnyUrl.validate(input_data)
             tempdata.update({"REGISTRAR": await registrar.request_data(input_data)})
@@ -40,7 +44,7 @@ async def summary_function(input_data: RequestDataModel):
         data = {}
         # set Summary Info
         # Get ABUSE IPDB Info
-        if "InvalidAPIUrl" not in tempdata["ABUSEIPDB"]:
+        if "ABUSEIPDB" in tempdata and "InvalidAPIUrl" not in tempdata["ABUSEIPDB"]:
             data.update({"Inputed_string": input_data})
             data.update({"Abuse_IP": tempdata["ABUSEIPDB"]["data"]["ipAddress"]})  # fmt: skip
             data.update({"Abuse_Score": tempdata["ABUSEIPDB"]["data"]["abuseConfidenceScore"]})  # fmt: skip
@@ -60,52 +64,55 @@ async def summary_function(input_data: RequestDataModel):
                     data.update({"Abuse_Reports_Comments": comments})
 
         # Get ProxyCheck Ip
-        proxy_keys = list(tempdata["PROXY"].keys())
-        proxy_ip_key = next((key for key in proxy_keys if key != "status"), None)
-        if "InvalidAPIUrl" not in tempdata["PROXY"]:
-            data.update({"Proxy_IP": proxy_ip_key})  # fmt: skip
-            data.update({"Proxy_ISOCountry": tempdata["PROXY"][proxy_ip_key]["isocode"]})  # fmt: skip
-            data.update({"Proxy_Country": tempdata["PROXY"][proxy_ip_key]["country"]})  # fmt: skip
-            data.update({"Proxy_Proxy": tempdata["PROXY"][proxy_ip_key]["proxy"]})  # fmt: skip
-            data.update({"Proxy_Type": tempdata["PROXY"][proxy_ip_key]["type"]})  # fmt: skip
-            data.update({"Proxy_City": tempdata["PROXY"][proxy_ip_key]["city"]})  # fmt: skip
-            data.update({"Proxy_Organ": tempdata["PROXY"][proxy_ip_key]["organisation"]})  # fmt: skip
+        if "PROXY" in tempdata:
+            proxy_keys = list(tempdata["PROXY"].keys())
+            proxy_ip_key = next((key for key in proxy_keys if key != "status"), None)
+            if "InvalidAPIUrl" not in tempdata["PROXY"]:
+                data.update({"Proxy_IP": proxy_ip_key})  # fmt: skip
+                data.update({"Proxy_ISOCountry": tempdata["PROXY"][proxy_ip_key]["isocode"]})  # fmt: skip
+                data.update({"Proxy_Country": tempdata["PROXY"][proxy_ip_key]["country"]})  # fmt: skip
+                data.update({"Proxy_Proxy": tempdata["PROXY"][proxy_ip_key]["proxy"]})  # fmt: skip
+                data.update({"Proxy_Type": tempdata["PROXY"][proxy_ip_key]["type"]})  # fmt: skip
+                data.update({"Proxy_City": tempdata["PROXY"][proxy_ip_key]["city"]})  # fmt: skip
+                data.update({"Proxy_Organ": tempdata["PROXY"][proxy_ip_key]["organisation"]})  # fmt: skip
 
         # Get Registrar Info
         # example registrar data {'domain': {'id': '3211695_DOMAIN_COM-VRSN', 'domain': 'epic.com', 'punycode': 'epic.com', 'name': 'epic', 'extension': 'com', 'whois_server': 'whois.godaddy.com', 'status': ['clientdeleteprohibited', 'clientrenewprohibited', 'clienttransferprohibited', 'clientupdateprohibited'], 'name_servers': ['dns-public-a.epic.com', 'dns-public-b.epic.com'], 'dnssec': True, 'created_date': '1990-08-23T04:00:00Z', 'created_date_in_time': '1990-08-23T04:00:00Z', 'updated_date': '2022-09-06T08:13:03Z', 'updated_date_in_time': '2022-09-06T08:13:03Z', 'expiration_date': '2025-09-18T11:59:59Z', 'expiration_date_in_time': '2025-09-18T11:59:59Z'}, 'registrar': {'id': '146', 'name': 'GoDaddy.com, LLC', 'phone': '480-624-2505', 'email': 'abuse@godaddy.com', 'referral_url': 'http://www.godaddy.com'}}
-        if "InvalidAPIUrl" not in tempdata["REGISTRAR"]:
-            try:
-                if "error" in tempdata["REGISTRAR"]:
-                    data.update({"Registrar_Error": tempdata["REGISTRAR"]["error"]})
-                else:
-                    data.update({"Registrar_WHOIS": tempdata["REGISTRAR"]["domain"]["whois_server"]})  # fmt: skip
-                    data.update({"Registrar_Name": tempdata["REGISTRAR"]["registrar"]["name"]})  # fmt: skip
-                    data.update({"Registrar_Created": tempdata["REGISTRAR"]["domain"]["created_date"]})  # fmt: skip
-                    data.update({"Registrar_Updated": tempdata["REGISTRAR"]["domain"]["updated_date"]})  # fmt: skip
-                    data.update({"Registrar_Expire": tempdata["REGISTRAR"]["domain"]["expiration_date"]})  # fmt: skip
-                    if "registrant" in tempdata["REGISTRAR"]:
-                        data.update({"Registrar_Data_Found": True})
+        if "REGISTRAR" in tempdata:
+            if "InvalidAPIUrl" not in tempdata["REGISTRAR"]:
+                try:
+                    if "error" in tempdata["REGISTRAR"]:
+                        data.update({"Registrar_Error": tempdata["REGISTRAR"]["error"]})
                     else:
-                        data.update({"Registrar_Data_Found": False})
-            except Exception:
-                data.update({"Registrar_Error": "True"})
+                        data.update({"Registrar_WHOIS": tempdata["REGISTRAR"]["domain"]["whois_server"]})  # fmt: skip
+                        data.update({"Registrar_Name": tempdata["REGISTRAR"]["registrar"]["name"]})  # fmt: skip
+                        data.update({"Registrar_Created": tempdata["REGISTRAR"]["domain"]["created_date"]})  # fmt: skip
+                        data.update({"Registrar_Updated": tempdata["REGISTRAR"]["domain"]["updated_date"]})  # fmt: skip
+                        data.update({"Registrar_Expire": tempdata["REGISTRAR"]["domain"]["expiration_date"]})  # fmt: skip
+                        if "registrant" in tempdata["REGISTRAR"]:
+                            data.update({"Registrar_Data_Found": True})
+                        else:
+                            data.update({"Registrar_Data_Found": False})
+                except Exception:
+                    data.update({"Registrar_Error": "True"})
         # Get VirusTotal Info
         # check if tempdata["VIRUS"] contains an element called error
-        if "InvalidAPIUrl" not in tempdata["VIRUS"]:
-            if "error" in tempdata["VIRUS"]:
-                logfire.error(
-                    "VirusTotal Error: {value}", value={tempdata["VIRUS"]["error"]}
-                )
-                data.update({"Virus_Error": tempdata["VIRUS"]["error"]})
-            else:
-                data.update({"Virus_Stats": tempdata["VIRUS"]["analysis_stats"]})
-                if "hash" in tempdata["VIRUS"]["data_type"]:
-                    data.update({"Virus_Type": "Hash"})
-                    data.update({"Virus_Name": tempdata["VIRUS"]["all"]["attributes"]["meaningful_name"]})  # fmt: skip
-                    data.update({"Virus_Magic": tempdata["VIRUS"]["all"]["attributes"]["magic"]})  # fmt: skip
-                    data.update({"Virus_ThreatCategory": tempdata["VIRUS"]["all"]["attributes"]["popular_threat_classification"]["popular_threat_category"]})  # fmt: skip
-            # Used if you just want to return an unformatted dict of the data collected, used for OpenAI
-            return data
+        if "VIRUS" in tempdata:
+            if "InvalidAPIUrl" not in tempdata["VIRUS"]:
+                if "error" in tempdata["VIRUS"]:
+                    logfire.error(
+                        "VirusTotal Error: {value}", value={tempdata["VIRUS"]["error"]}
+                    )
+                    data.update({"Virus_Error": tempdata["VIRUS"]["error"]})
+                else:
+                    data.update({"Virus_Stats": tempdata["VIRUS"]["analysis_stats"]})
+                    if "hash" in tempdata["VIRUS"]["data_type"]:
+                        data.update({"Virus_Type": "Hash"})
+                        data.update({"Virus_Name": tempdata["VIRUS"]["all"]["attributes"]["meaningful_name"]})  # fmt: skip
+                        data.update({"Virus_Magic": tempdata["VIRUS"]["all"]["attributes"]["magic"]})  # fmt: skip
+                        data.update({"Virus_ThreatCategory": tempdata["VIRUS"]["all"]["attributes"]["popular_threat_classification"]["popular_threat_category"]})  # fmt: skip
+                # Used if you just want to return an unformatted dict of the data collected, used for OpenAI
+                return data
 
 
 # Request Data from the Summary API

@@ -31,7 +31,7 @@ async def virus_total_function(input_data: RequestDataModel):
                         await client.scan_url_async(
                             str(input_data)
                         )  # Initiate the scan
-                        asyncio.sleep(1)  # Wait for the scan to complete
+                        await asyncio.sleep(1)  # Wait for the scan to complete
                         url = await client.get_object_async(
                             "/urls/{}", format(vt.url_id(input_data))
                         )

@@ -29,6 +29,7 @@ async def get_cards(input_data: str = Body(..., embed=False)):
 
             # Process based on the data type
             if datatype in ["url", "ip"]:
+                # This is called as it will verify if a url is a legitimate url by calling the DNS resolver for it. If the URL is not legitimate (leads no where) then it will trigger an exception, which returns a 'NotRecognised' response.
                 utils.process_address_to_ip(input_data)
 
                 # Conditionally add cards based on settings and availability

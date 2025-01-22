@@ -1,13 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '../components/pages/MainApp.vue';  // Import your Home component
+import Home from '../components/pages/MainApp.vue';
 import About from '../components/pages/About.vue';
 import BugReport from '../components/pages/BugReport.vue';
 
 const routes = [
   {
-    path: '/',
+    // NOTE: Add an optional parameter :searchParam?
+    path: '/:searchParam?',
     name: 'Home',
-    component: Home, // Use the Home component
+    component: Home, 
   },
   {
     path: '/about',
@@ -22,7 +23,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),  // Use HTML5 history mode for clean URLs
+  history: createWebHistory(),
   routes,
 });
 
