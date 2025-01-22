@@ -27,7 +27,7 @@ async def registrar_function(input_data: AnyUrl):
             response = requests.get(check_address)
             response = response.json()
         else:
-            logfire.error("{error}", error=traceback.format_exc())
+            logfire.error("Response is not JSON.. possibly a html response from server if the API is down: {error}", error=traceback.format_exc())
             #print("Response is not JSON.. possibly a html response from server if the API is down")
             response = None
 
