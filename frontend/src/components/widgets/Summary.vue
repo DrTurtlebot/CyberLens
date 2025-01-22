@@ -30,33 +30,36 @@
                 ]"
               />
             </div>
-            <div v-else>
+            <div v-else-if="responseData.Abuse_IP">
+                <infogrid
+                  :infoItems="[
+                    { label: 'IP:', value: responseData.Abuse_IP }
+                  ]"
+                />
+              
+
+              <!-- ISP Info -->
               <infogrid
                 :infoItems="[
-                  { label: 'IP:', value: responseData.Abuse_IP }
+                  { label: 'ISP:', value: responseData.Abuse_ISP }
+                ]"
+              />
+            </div>  
+
+
+            <!-- Proxy Detected Section -->
+             <div v-if="responseData.Proxy_Proxy">
+              <hr class="w-full max-w-[600px] m-auto p-1">
+              <div v-if="responseData.Proxy_Proxy !== 'no'">
+                <b class="text-white bg-blue-500 p-1 w-full max-w-[600px] m-auto block">Info: Proxy Detected</b>
+              </div>
+              <infogrid
+                :infoItems="[
+                  { label: 'Proxy:', value: responseData.Proxy_Proxy },
+                  { label: 'Connection Type:', value: responseData.Proxy_Type }
                 ]"
               />
             </div>
-
-            <!-- ISP Info -->
-            <infogrid
-              :infoItems="[
-                { label: 'ISP:', value: responseData.Abuse_ISP }
-              ]"
-            />
-
-            <hr class="w-full max-w-[600px] m-auto p-1">
-
-            <!-- Proxy Detected Section -->
-            <div v-if="responseData.Proxy_Proxy !== 'no'">
-              <b class="text-white bg-blue-500 p-1 w-full max-w-[600px] m-auto block">Info: Proxy Detected</b>
-            </div>
-            <infogrid
-              :infoItems="[
-                { label: 'Proxy:', value: responseData.Proxy_Proxy },
-                { label: 'Connection Type:', value: responseData.Proxy_Type }
-              ]"
-            />
 
             <!-- Conflict of Location Section -->
             <!-- These are chunky as they have lots of fall backs depending on what modules were sent. -->
