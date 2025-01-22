@@ -60,13 +60,9 @@
         </button>
       </div>
     </div>
-
-    <!-- DATA SECTION (remains visible in print) -->
     <div id="dataContainer" class="4k:mt-12">
       <PopulateCards :input="submittedInput" />
     </div>
-
-    <!-- PRINT BUTTON (hidden before print), only visible if submittedInput is non-empty -->
     <div
       id="printBtnContainer"
       class="flex justify-center mt-6"
@@ -95,21 +91,72 @@ export default defineComponent({
     CustomHeader,
   },
   setup() {
+    // Vue Router references
+    const route = useRoute();
+    const router = useRouter();
+
     // Reactive references
     const input = ref('');
     const submittedInput = ref('');
 
-    const route = useRoute();
-    const router = useRouter();
+    // Regex for IP addresses
+    const isIpAddress = (value) => {
+      const ipPattern = /^(25[0-5]|2[0-4]\d|[01]?\d?\d)\.(25[0-5]|2[0-4]\d|[01]?\d?\d)\.(25[0-5]|2[0-4]\d|[01]?\d?\d)\.(25[0-5]|2[0-4]\d|[01]?\d?\d)$/;
+      return ipPattern.test(value);
+    };
 
+    // Regex for common hash lengths (32/40/64)
+    const isHash = (value) => {
+      const hashPattern = /^[a-fA-F0-9]{32}$|^[a-fA-F0-9]{40}$|^[a-fA-F0-9]{64}$/;
+      return hashPattern.test(value);
+    };
+
+    // Format/clean the user input
+    const formatUrl = (value) => {
+      // Remove whitespace
+      value = value.replace(/\s/g, '');
+
+      // If IP address or recognized hash, return as-is
+      if (isIpAddress(value) || isHash(value)) {
+        return value;
+      }
+
+      // If it's a URL
+      const urlPattern = /^(https?:\/\/)?([\w-]+\.)+\w{2,}(\/.*)?$/;
+      const hasProtocol = /^https?:\/\//.test(value);
+
+      if (urlPattern.test(value)) {
+        return hasProtocol ? value : `http://${value}`;
+      }
+
+      // Fallback if it's not recognized as a typical URL
+      return `http://www.${value}`;
+    };
+
+    // Submits user input
+    const submitInput = () => {
+      if (input.value) {
+        submittedInput.value = formatUrl(input.value);
+        console.log('Submitted:', submittedInput.value);
+
+        // Update route param for shareable link
+        router.push({
+          name: 'Home',
+          params: { searchParam: input.value },
+        });
+      }
+    };
+
+    // Auto-load from route params if something like /test.com
     onMounted(() => {
       const param = route.params.searchParam;
       if (param) {
         input.value = param;
-        submitInput(); // automatically search
+        submitInput(); // automatically triggers the search
       }
     });
 
+    // Watch for param changes if user navigates to /other.com
     watch(
       () => route.params.searchParam,
       (newVal, oldVal) => {
@@ -120,20 +167,7 @@ export default defineComponent({
       }
     );
 
-    // 3) User triggers a search
-    const submitInput = () => {
-      if (input.value) {
-        submittedInput.value = input.value;
-        console.log('Submitted:', submittedInput.value);
-
-        // Optionally update route param for shareable link
-        router.push({
-          name: 'Home',
-          params: { searchParam: input.value },
-        });
-      }
-    };
-
+    // Print logic: hides certain elements, calls window.print(), reverts
     const printPage = () => {
       const headerBar = document.getElementById('headerBar');
       const introSection = document.getElementById('introSection');
@@ -148,7 +182,7 @@ export default defineComponent({
 
       setTimeout(() => {
         window.print();
-        // restore
+        // Restore
         setTimeout(() => {
           if (headerBar) headerBar.style.display = '';
           if (introSection) introSection.style.display = '';
@@ -158,9 +192,15 @@ export default defineComponent({
       }, 200);
     };
 
+    // Return everything to the template
     return {
+      route,
+      router,
       input,
       submittedInput,
+      isIpAddress,
+      isHash,
+      formatUrl,
       submitInput,
       printPage,
     };
@@ -169,16 +209,19 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.main-app {
+}
 
 /* Print styling */
 @media print {
+
   .main-app {
     zoom: 0.7;
   }
 
   @page {
     size: A4;     
-    margin: 10mm;  
+    margin: 10mm; 
   }
 
   .ModuleBox {
