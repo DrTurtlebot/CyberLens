@@ -80,9 +80,10 @@
               ]"
             />
 
-            <hr class="w-full max-w-[600px] m-auto p-1 mt-2">
 
             <!-- Threat Categories -->
+            <div v-if="responseData?.all?.attributes?.popular_threat_classification?.popular_threat_category">
+            <hr class="w-full max-w-[600px] m-auto p-1 mt-2">
             <div class="InfoGrid">
               <div class="InfoLabel"><b>Threat Categories:</b></div>
               <div class="InfoValue">
@@ -93,11 +94,13 @@
                 </ul>
               </div>
             </div>
+            </div>
 
-            <hr class="w-full max-w-[600px] m-auto p-1 mt-2">
 
             <!-- Threat Names -->
-            <div class="InfoGrid">
+            <div v-if="responseData?.all?.attributes?.popular_threat_classification?.popular_threat_name">
+              <hr class="w-full max-w-[600px] m-auto p-1 mt-2">
+              <div class="InfoGrid">
               <div class="InfoLabel"><b>Threat Names:</b></div>
               <div class="InfoValue">
                 <ul>
@@ -106,6 +109,7 @@
                   </li>
                 </ul>
               </div>
+            </div>
             </div>
 
             <hr class="w-full max-w-[600px] m-auto p-1 mt-2">
